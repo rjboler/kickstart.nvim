@@ -11,6 +11,20 @@ return {
     'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
     'MunifTanjim/nui.nvim',
   },
+  config = function()
+    require("neo-tree").setup({
+      source_selector = {
+        winbar = true,
+        statusline = false,
+        truncation_character = ""
+      },
+      filesystem = {
+        filtered_items = {
+          visible = true,
+        },
+      },
+    })
+  end,
   lazy = false,
   keys = {
     { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },

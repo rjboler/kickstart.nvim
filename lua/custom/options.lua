@@ -62,19 +62,28 @@ vim.api.nvim_set_hl(0, 'NonText', { bg = 'none' })
 vim.api.nvim_set_hl(0, 'LineNr', { bg = 'none' })
 vim.api.nvim_set_hl(0, 'SignColumn', { bg = 'none' })
 -- END StyleOptions
---
--- -- BEGIN NeoGen
---
--- require('neogen').setup {
---   enabled = true,
---   input_after_command = true,
---   languages = {
---     python = {
---       template = {
---         annotation_convention = 'google_docstrings',
---       },
---     },
---   },
--- }
---
--- -- END NeoGen
+
+-- BEGIN NeoGen
+
+require('neogen').setup {
+  enabled = true,
+  input_after_command = true,
+  languages = {
+    python = {
+      template = {
+        annotation_convention = 'google_docstrings',
+      },
+    },
+  },
+}
+
+-- END NeoGen
+
+-- -- BEGIN NFD
+-- require('mfd').setup({
+--   -- bright_comments = true, -- increase comment visibility (default: false)
+--   -- no_italic = true,       -- disable italic highlighting (default: false)
+-- })
+-- -- END NFD
+
+vim.keymap.set("v", "m", '"0p', { desc = "Paste without rewriting buffer" })

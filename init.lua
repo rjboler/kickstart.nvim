@@ -102,7 +102,7 @@ vim.g.have_nerd_font = false
 vim.o.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.o.relativenumber = true
+vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
@@ -242,6 +242,10 @@ end
 ---@type vim.Option
 local rtp = vim.opt.rtp
 rtp:prepend(lazypath)
+
+-- vim.opt["expandtab"] = true
+vim.opt["tabstop"] = 4
+vim.opt["shiftwidth"] = 4
 
 -- [[ Configure and install plugins ]]
 --
@@ -764,7 +768,7 @@ require('lazy').setup({
         -- <c-k>: Toggle signature help
         --
         -- See :h blink-cmp-config-keymap for defining your own keymap
-        preset = 'default',
+        preset = 'super-tab',
 
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -865,6 +869,39 @@ require('lazy').setup({
       -- cursor location to LINE:COLUMN
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.section_location = function() return '%2l:%-2v' end
+
+      -- Mini.Nvim Diff Hunks
+      -- https://nvim-mini.org/mini.nvim/readmes/mini-diff
+      require('mini.diff').setup()
+
+      -- Window with buffer text overview, scrollbar, and highlights
+      -- https://github.com/nvim-mini/mini.nvim/blob/main/readmes/mini-map.md
+      local mmap = require('mini.map')
+      require('mini.map').setup({
+        integrations = {
+          mmap.gen_integration.builtin_search(),
+          mmap.gen_integration.diagnostic({
+            error = 'DiagnosticFloatingError',
+            warn  = 'DiagnosticFloatingWarn',
+            info  = 'DiagnosticFloatingInfo',
+            hint  = 'DiagnosticFloatingHint',
+          }),
+          mmap.gen_integration.gitsigns(),
+          mmap.gen_integration.diff(),
+        },
+        symbols = {
+          encode = mmap.gen_encode_symbols.dot('4x2'),
+          scroll_line = '█',
+          scroll_view = '┃',
+        },
+      })
+      vim.keymap.set('n', '<Leader>mc', MiniMap.close, { desc = "[C]lose Minimap" })
+      vim.keymap.set('n', '<Leader>mf', MiniMap.toggle_focus, { desc = "Toggle Minimap [F]ocus" })
+      vim.keymap.set('n', '<Leader>mo', MiniMap.open, { desc = "[O]pen Minimap" })
+      vim.keymap.set('n', '<Leader>mr', MiniMap.refresh, { desc = "[R]efresh Minimap" })
+      vim.keymap.set('n', '<Leader>ms', MiniMap.toggle_side, { desc = "Toggle Minimap [S]ide" })
+      vim.keymap.set('n', '<Leader>mt', MiniMap.toggle, { desc = "[T]oggle Minimap" })
+      MiniMap.open()
 
       -- ... and there is more!
       --  Check out: https://github.com/nvim-mini/mini.nvim
@@ -978,5 +1015,11 @@ require('lazy').setup({
   },
 })
 
+require 'custom/lsp/c'
+require 'custom/lsp/nix'
+require 'custom/lsp/python'
+require 'custom/lsp/rust'
+require 'custom/lsp/web'
+require 'custom/options'
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
