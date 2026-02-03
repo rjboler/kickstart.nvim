@@ -347,6 +347,7 @@ require('lazy').setup({
         { '<leader>s', group = '[S]earch' },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+        { '<leader>m', group = '[M]iniMap' },
       },
     },
   },
@@ -903,7 +904,8 @@ require('lazy').setup({
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
   { -- Collection of various small independent plugins/modules
-    'echasnovski/mini.nvim',
+    'nvim-mini/mini.nvim',
+    version = '*',
     config = function()
       -- Better Around/Inside textobjects
       --
@@ -941,7 +943,27 @@ require('lazy').setup({
 
       -- Window with buffer text overview, scrollbar, and highlights
       -- https://github.com/nvim-mini/mini.nvim/blob/main/readmes/mini-map.md
-      require('mini.map').setup()
+      local mmap = require('mini.map')
+      require('mini.map').setup({
+        integrations = {
+          mmap.gen_integration.builtin_search(),
+          mmap.gen_integration.diagnostic(),
+          mmap.gen_integration.gitsigns(),
+          mmap.gen_integration.diff(),
+        },
+        symbols = {
+          encode = mmap.gen_encode_symbols.dot('4x2'),
+          scroll_line = '█',
+          scroll_view = '┃',
+        },
+      })
+      vim.keymap.set('n', '<Leader>mc', MiniMap.close, { desc = "[C]lose Minimap" })
+      vim.keymap.set('n', '<Leader>mf', MiniMap.toggle_focus, { desc = "Toggle Minimap [F]ocus" })
+      vim.keymap.set('n', '<Leader>mo', MiniMap.open, { desc = "[O]pen Minimap" })
+      vim.keymap.set('n', '<Leader>mr', MiniMap.refresh, { desc = "[R]efresh Minimap" })
+      vim.keymap.set('n', '<Leader>ms', MiniMap.toggle_side, { desc = "Toggle Minimap [S]ide" })
+      vim.keymap.set('n', '<Leader>mt', MiniMap.toggle, { desc = "[T]oggle Minimap" })
+      MiniMap.open()
 
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
