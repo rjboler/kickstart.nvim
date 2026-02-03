@@ -947,7 +947,12 @@ require('lazy').setup({
       require('mini.map').setup({
         integrations = {
           mmap.gen_integration.builtin_search(),
-          mmap.gen_integration.diagnostic(),
+          mmap.gen_integration.diagnostic({
+            error = 'DiagnosticFloatingError',
+            warn  = 'DiagnosticFloatingWarn',
+            info  = 'DiagnosticFloatingInfo',
+            hint  = 'DiagnosticFloatingHint',
+          }),
           mmap.gen_integration.gitsigns(),
           mmap.gen_integration.diff(),
         },
