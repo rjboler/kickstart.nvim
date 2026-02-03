@@ -935,6 +935,10 @@ require('lazy').setup({
         return '%2l:%-2v'
       end
 
+      -- Mini.Nvim Diff Hunks
+      -- https://nvim-mini.org/mini.nvim/readmes/mini-diff
+      require('mini.diff').setup()
+
       -- Window with buffer text overview, scrollbar, and highlights
       -- https://github.com/nvim-mini/mini.nvim/blob/main/readmes/mini-map.md
       require('mini.map').setup()
