@@ -15,7 +15,12 @@ return {
         winbar = true,
         statusline = false,
         truncation_character = ""
-      }
+      },
+      filesystem = {
+        filtered_items = {
+          visible = true,
+        },
+      },
     })
   end,
   lazy = false,
