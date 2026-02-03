@@ -935,6 +935,10 @@ require('lazy').setup({
         return '%2l:%-2v'
       end
 
+      -- Window with buffer text overview, scrollbar, and highlights
+      -- https://github.com/nvim-mini/mini.nvim/blob/main/readmes/mini-map.md
+      require('mini.map').setup()
+
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
