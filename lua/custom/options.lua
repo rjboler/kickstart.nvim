@@ -82,3 +82,12 @@ require('neogen').setup {
 }
 
 -- END NeoGen
+
+-- -- BEGIN NFD
+-- require('mfd').setup({
+--   -- bright_comments = true, -- increase comment visibility (default: false)
+--   -- no_italic = true,       -- disable italic highlighting (default: false)
+-- })
+-- -- END NFD
+
+vim.keymap.set("v", "m", '"0p', { desc = "Paste without rewriting buffer" })
