@@ -171,6 +171,10 @@ do
   -- instead raise a dialog asking if you wish to save the current file(s)
   -- See `:help 'confirm'`
   vim.o.confirm = true
+
+  -- vim.o.expandtab = true
+  vim.o.tabstop = 4
+  vim.o.shiftwidth = 4
 end
 
 -- ============================================================
@@ -314,6 +318,7 @@ do
         if not ev.data.active then vim.cmd.packadd 'nvim-treesitter' end
         vim.cmd 'TSUpdate'
         return
+
       end
     end,
   })
@@ -444,6 +449,39 @@ do
   -- cursor location to LINE:COLUMN
   ---@diagnostic disable-next-line: duplicate-set-field
   statusline.section_location = function() return '%2l:%-2v' end
+
+  -- Mini.Nvim Diff Hunks
+  -- https://nvim-mini.org/mini.nvim/readmes/mini-diff
+  require('mini.diff').setup()
+
+  -- Window with buffer text overview, scrollbar, and highlights
+  -- https://github.com/nvim-mini/mini.nvim/blob/main/readmes/mini-map.md
+  local mmap = require('mini.map')
+  require('mini.map').setup({
+    integrations = {
+      mmap.gen_integration.builtin_search(),
+      mmap.gen_integration.diagnostic({
+        error = 'DiagnosticFloatingError',
+        warn  = 'DiagnosticFloatingWarn',
+        info  = 'DiagnosticFloatingInfo',
+        hint  = 'DiagnosticFloatingHint',
+      }),
+      mmap.gen_integration.gitsigns(),
+      mmap.gen_integration.diff(),
+    },
+    symbols = {
+      encode = mmap.gen_encode_symbols.dot('4x2'),
+      scroll_line = '█',
+      scroll_view = '┃',
+    },
+  })
+  vim.keymap.set('n', '<Leader>mc', MiniMap.close, { desc = "[C]lose Minimap" })
+  vim.keymap.set('n', '<Leader>mf', MiniMap.toggle_focus, { desc = "Toggle Minimap [F]ocus" })
+  vim.keymap.set('n', '<Leader>mo', MiniMap.open, { desc = "[O]pen Minimap" })
+  vim.keymap.set('n', '<Leader>mr', MiniMap.refresh, { desc = "[R]efresh Minimap" })
+  vim.keymap.set('n', '<Leader>ms', MiniMap.toggle_side, { desc = "Toggle Minimap [S]ide" })
+  vim.keymap.set('n', '<Leader>mt', MiniMap.toggle, { desc = "[T]oggle Minimap" })
+  MiniMap.open()
 
   -- ... and there is more!
   --  Check out: https://github.com/nvim-mini/mini.nvim
@@ -852,7 +890,7 @@ do
       -- <c-k>: Toggle signature help
       --
       -- See `:help blink-cmp-config-keymap` for defining your own keymap
-      preset = 'default',
+      preset = 'super-tab',
 
       -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
       --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -967,17 +1005,50 @@ do
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
   -- require 'kickstart.plugins.debug'
-  -- require 'kickstart.plugins.indent_line'
+  require 'kickstart.plugins.indent_line'
   -- require 'kickstart.plugins.lint'
   -- require 'kickstart.plugins.autopairs'
-  -- require 'kickstart.plugins.neo-tree'
-  -- require 'kickstart.plugins.gitsigns' -- adds gitsigns recommended keymaps
+  require 'kickstart.plugins.neo-tree'
+  require 'kickstart.plugins.gitsigns' -- adds gitsigns recommended keymaps
+
+  require 'custom.lsp.c'
+  require 'custom.lsp.nix'
+  require 'custom.lsp.python'
+  require 'custom.lsp.rust'
+  require 'custom.lsp.web'
+  require 'custom.options'
 
   -- NOTE: You can add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- require 'custom.plugins'
+  require 'custom.plugins'
 end
+
+-- -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
+-- -- Or use telescope!
+-- -- In normal mode type `<space>sh` then write `lazy.nvim-plugin`
+-- -- you can continue same window with `<space>sr` which resumes last telescope search
+-- { ---@diagnostic disable-line: missing-fields
+--   ui = {
+--     -- If you are using a Nerd Font: set icons to an empty table which will use the
+--     -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
+--     icons = vim.g.have_nerd_font and {} or {
+--       cmd = '⌘',
+--       config = '🛠',
+--       event = '📅',
+--       ft = '📂',
+--       init = '⚙',
+--       keys = '🗝',
+--       plugin = '🔌',
+--       runtime = '💻',
+--       require = '🌙',
+--       source = '📄',
+--       start = '🚀',
+--       task = '📌',
+--       lazy = '💤 ',
+--     },
+--   },
+-- }
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
